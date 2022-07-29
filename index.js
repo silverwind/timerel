@@ -12,7 +12,7 @@ function parse(date) {
   return typeof date === "number" ? date : Date.parse(date);
 }
 
-export function timerel(date, ref = Date.now(), {noAffix = false} = {}) {
+export function timerel(date, ref = Date.now(), {noAffix = false, timeTable = timeData} = {}) {
   date = parse(date);
   ref = parse(ref);
 
@@ -22,9 +22,9 @@ export function timerel(date, ref = Date.now(), {noAffix = false} = {}) {
   if (diff < 10000) return "now";
 
   let num, suffix;
-  for (let i = 0; i <= timeData.length; i++) {
-    if (diff >= timeData[i][0]) continue;
-    const [_, start, unit] = timeData[i];
+  for (let i = 0; i <= timeTable.length; i++) {
+    if (diff >= timeTable[i][0]) continue;
+    const [_, start, unit] = timeTable[i];
     num = Math.floor(diff / start);
     suffix = `${unit}${num > 1 ? "s" : ""}`;
     break;
