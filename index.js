@@ -19,7 +19,7 @@ export function timerel(date, ref = Date.now(), {noAffix = false} = {}) {
   if (Number.isNaN(date) || Number.isNaN(ref)) return "unknown";
 
   const diff = Math.abs(ref - date);
-  if (diff < 10000) return "just now";
+  if (diff < 10000) return "now";
 
   let num, suffix;
   for (let i = 0; i <= timeData.length; i++) {
