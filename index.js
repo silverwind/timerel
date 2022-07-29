@@ -12,9 +12,9 @@ function parse(date) {
   return typeof date === "number" ? date : Date.parse(date);
 }
 
-export function timerel(date, ref = Date.now(), {noAffix = false, timeTable = timeData} = {}) {
+export function timerel(date, ref, {noAffix = false, timeTable = timeData} = {}) {
   date = parse(date);
-  ref = parse(ref);
+  ref = parse([null, undefined].includes(ref) ? Date.now() : ref);
 
   if (Number.isNaN(date) || Number.isNaN(ref)) return "unknown";
 
