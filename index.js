@@ -13,9 +13,9 @@ function parse(date) {
 }
 
 export function timerel(date, ref = Date.now(), {noAffix = false} = {}) {
-  if (date === undefined) return "unknown";
   date = parse(date);
   ref = parse(ref);
+
   if (Number.isNaN(date) || Number.isNaN(ref)) return "unknown";
 
   const diff = Math.abs(ref - date);
