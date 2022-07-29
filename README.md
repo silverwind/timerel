@@ -13,10 +13,10 @@ console.log(timerel(Date.now() - 1e6));
 ```
 
 ## API
-### timerel(date, [reference], [{noAffix}])
+### timerel(date, [ref], [{noAffix}])
 
 - `date` *String, Number or Date*: The date to format
-- `reference` *String, Number or Date*: The date to compare to. Default: `Date.now()`
+- `ref` *String, Number or Date*: The date to compare to. Default: `Date.now()`
 - `noAffix` *Boolean*: Whether to omit `ago` and `in` affixes. Default: `false`
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence
