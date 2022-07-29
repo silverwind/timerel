@@ -12,7 +12,7 @@ function parse(date) {
   return typeof date === "number" ? date : Date.parse(date);
 }
 
-export function reltime(date, now = Date.now(), {noAffix} = {}) {
+export function timerel(date, now = Date.now(), {noAffix} = {}) {
   if (date === undefined) return "unknown";
   const time = parse(date);
   const ref = parse(now);

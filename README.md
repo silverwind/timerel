@@ -1,19 +1,19 @@
-# rel-time
-[![](https://img.shields.io/npm/v/rel-time.svg?style=flat)](https://www.npmjs.org/package/rel-time) [![](https://img.shields.io/npm/dm/rel-time.svg)](https://www.npmjs.org/package/rel-time)
+# timerel
+[![](https://img.shields.io/npm/v/timerel.svg?style=flat)](https://www.npmjs.org/package/timerel) [![](https://img.shields.io/npm/dm/timerel.svg)](https://www.npmjs.org/package/timerel)
 
-`rel-time` formats dates to english relative format `5 mins ago` and does so around 8 times faster than its competition.
+`timerel` formats dates to english relative format `5 mins ago` and does so around 8 times faster than its competition.
 
 ## Usage
 
 ```js
-import {reltime} from "rel-time";
+import {timerel} from "timerel";
 
-console.log(reltime(Date.now() - 1e6));
+console.log(timerel(Date.now() - 1e6));
 // => 16 mins ago
 ```
 
 ## API
-### reltime(date, [reference], [{noAffix}])
+### timerel(date, [reference], [{noAffix}])
 
 - `date` *String, Number or Date*: the date to format
 - `reference` *String, Number or Date*: the reference date to compare to. Default: `Date.now()`.
