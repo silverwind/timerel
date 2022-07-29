@@ -13,7 +13,7 @@ console.log(timerel(Date.now() - 1e6));
 ```
 
 ## API
-### timerel(date, [{ref, noAffix}])
+### timerel(date, {ref, noAffix} = {})
 
 - `date` *String, Number or Date*: The date to format
 - `ref` *String, Number or Date*: The date to compare to. Default: `Date.now()`
