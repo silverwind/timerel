@@ -12,13 +12,13 @@ function parse(date) {
   return typeof date === "number" ? date : Date.parse(date);
 }
 
-export function timerel(date, now = Date.now(), {noAffix} = {}) {
+export function timerel(date, ref = Date.now(), {noAffix = false} = {}) {
   if (date === undefined) return "unknown";
-  const time = parse(date);
-  const ref = parse(now);
-  if (Number.isNaN(time) || Number.isNaN(ref)) return "unknown";
+  date = parse(date);
+  ref = parse(ref);
+  if (Number.isNaN(date) || Number.isNaN(ref)) return "unknown";
 
-  const diff = Math.abs(ref - time);
+  const diff = Math.abs(ref - date);
   if (diff < 10000) return "just now";
 
   let num, suffix;
@@ -30,7 +30,7 @@ export function timerel(date, now = Date.now(), {noAffix} = {}) {
     break;
   }
 
-  const future = time > ref;
+  const future = date > ref;
   const before = future ? (noAffix ? "" : "in ") : "";
   const after = !future ? (noAffix ? "" : " ago") : "";
   return `${before}${num} ${suffix}${after}`;
