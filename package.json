@@ -1,0 +1,19 @@
+{
+  "name": "rel-time",
+  "version": "0.0.0",
+  "description": "Teeny tiny relative date formatting",
+  "author": "silverwind",
+  "repository": "silverwind/rel-time",
+  "license": "BSD-2-Clause",
+  "type": "module",
+  "files": [
+    "./index.js"
+  ],
+  "devDependencies": {
+    "eslint": "8.20.0",
+    "eslint-config-silverwind": "51.0.1",
+    "jest": "28.1.3",
+    "updates": "13.1.2",
+    "versions": "9.3.0"
+  }
+}
