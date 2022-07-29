@@ -1,4 +1,4 @@
-const timeData = [
+const timeTable = [
   [60000, 1000, "sec"],
   [3600000, 60000, "min"],
   [86400000, 3600000, "hour"],
@@ -12,7 +12,7 @@ function parse(date) {
   return typeof date === "number" ? date : Date.parse(date);
 }
 
-export function timerel(date, ref, {noAffix = false, timeTable = timeData} = {}) {
+export function timerel(date, {ref, noAffix = false} = {}) {
   date = parse(date);
   ref = parse([null, undefined].includes(ref) ? Date.now() : ref);
 
