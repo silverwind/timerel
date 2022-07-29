@@ -6,6 +6,8 @@
   "repository": "silverwind/rel-time",
   "license": "BSD-2-Clause",
   "type": "module",
+  "exports": "./index.js",
+  "main": "./index.cjs",
   "files": [
     "./index.js"
   ],
