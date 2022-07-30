@@ -8,9 +8,7 @@ const times = [
   [Infinity, 31536000000, "year"],
 ];
 
-function parse(date) {
-  return typeof date === "number" ? date : Date.parse(date);
-}
+const parse = date => typeof date === "number" ? date : Date.parse(date);
 
 export function timerel(date, {ref, noAffix = false} = {}) {
   date = parse(date);
