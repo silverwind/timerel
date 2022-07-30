@@ -1,4 +1,4 @@
-const timeTable = [
+const times = [
   [60000, 1000, "sec"],
   [3600000, 60000, "min"],
   [86400000, 3600000, "hour"],
@@ -15,23 +15,19 @@ function parse(date) {
 export function timerel(date, {ref, noAffix = false} = {}) {
   date = parse(date);
   ref = parse([null, undefined].includes(ref) ? Date.now() : ref);
-
   if (Number.isNaN(date) || Number.isNaN(ref)) return "unknown";
 
   const diff = Math.abs(ref - date);
   if (diff < 10000) return "now";
 
   let num, suffix;
-  for (let i = 0; i <= timeTable.length; i++) {
-    if (diff >= timeTable[i][0]) continue;
-    const [_, start, unit] = timeTable[i];
-    num = Math.floor(diff / start);
-    suffix = `${unit}${num > 1 ? "s" : ""}`;
+  for (const time of times) {
+    if (diff >= time[0]) continue;
+    num = Math.floor(diff / time[1]);
+    suffix = `${time[2]}${num > 1 ? "s" : ""}`;
     break;
   }
 
   const future = date > ref;
-  const before = future ? (noAffix ? "" : "in ") : "";
-  const after = !future ? (noAffix ? "" : " ago") : "";
-  return `${before}${num} ${suffix}${after}`;
+  return `${future && !noAffix ? "in " : ""}${num} ${suffix}${!future && !noAffix ? " ago" : ""}`;
 }
