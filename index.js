@@ -1,3 +1,13 @@
+const times = [
+  [1000, 60000, "sec"],
+  [60000, 3600000, "min"],
+  [3600000, 86400000, "hour"],
+  [86400000, 604800000, "day"],
+  [604800000, 2628000000, "week"],
+  [2628000000, 31536000000, "month"],
+  [31536000000, Infinity, "year"],
+];
+
 export function timerel(date, {noAffix = false} = {}) {
   date = typeof date === "number" ? date : Date.parse(date);
   if (Number.isNaN(date)) return "unknown";
@@ -7,18 +17,11 @@ export function timerel(date, {noAffix = false} = {}) {
   if (diff < 10000) return "now";
 
   let num, suffix;
-  for (const time of [
-    [60000, 1000, "sec"],
-    [3600000, 60000, "min"],
-    [86400000, 3600000, "hour"],
-    [604800000, 86400000, "day"],
-    [2628000000, 604800000, "week"],
-    [31536000000, 2628000000, "month"],
-    [Infinity, 31536000000, "year"],
-  ]) {
-    if (diff >= time[0]) continue;
-    num = Math.floor(diff / time[1]);
-    suffix = `${time[2]}${num > 1 ? "s" : ""}`;
+  for (const time of times) {
+    if (diff >= time[1]) continue;
+    num = Math.floor(diff / time[0]);
+    suffix = time[2];
+    if (num > 1) suffix += "s";
     break;
   }
 
