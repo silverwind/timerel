@@ -13,7 +13,13 @@ export function timerel(date, {noAffix = false} = {}) {
   if (Number.isNaN(date)) return "unknown";
 
   const ref = Date.now();
-  const diff = Math.abs(ref - date);
+  let future = false;
+  let diff = ref - date;
+
+  if (diff < 0) {
+    future = true;
+    diff = Math.abs(diff);
+  }
   if (diff < 10000) return "now";
 
   let num, suffix;
@@ -25,6 +31,5 @@ export function timerel(date, {noAffix = false} = {}) {
     break;
   }
 
-  const future = date > ref;
   return `${future && !noAffix ? "in " : ""}${num} ${suffix}${!future && !noAffix ? " ago" : ""}`;
 }
