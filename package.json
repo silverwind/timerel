@@ -3,7 +3,7 @@
   "version": "5.0.0",
   "description": "Teeny tiny relative date formatting",
   "author": "silverwind",
-  "repository": "silverwind/rel-time",
+  "repository": "silverwind/timerel",
   "license": "BSD-2-Clause",
   "type": "module",
   "exports": "./index.js",
