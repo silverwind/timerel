@@ -11,6 +11,22 @@
   "files": [
     "./index.js"
   ],
+  "keywords": [
+    "timerel",
+    "timeago",
+    "time ago",
+    "time relative",
+    "time since",
+    "time difference",
+    "relative time",
+    "relative date",
+    "seconds ago",
+    "minutes ago",
+    "hours ago",
+    "days ago",
+    "date",
+    "datetime"
+  ],
   "devDependencies": {
     "eslint": "8.21.0",
     "eslint-config-silverwind": "51.0.3",
