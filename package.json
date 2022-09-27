@@ -28,11 +28,11 @@
     "datetime"
   ],
   "devDependencies": {
-    "eslint": "8.23.0",
-    "eslint-config-silverwind": "51.0.5",
-    "jest": "29.0.1",
+    "eslint": "8.24.0",
+    "eslint-config-silverwind": "55.1.0",
+    "jest": "29.0.3",
     "timeago.js": "4.0.2",
-    "updates": "13.1.5",
-    "versions": "9.3.0"
+    "updates": "13.1.8",
+    "versions": "9.3.3"
   }
 }
