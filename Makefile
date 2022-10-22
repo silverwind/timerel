@@ -7,7 +7,7 @@ lint: node_modules
 
 .PHONY: test
 test: node_modules lint
-	NODE_OPTIONS="--experimental-vm-modules --no-warnings" npx jest --color
+	npx vitest
 
 .PHONY: publish
 publish: node_modules
@@ -23,15 +23,15 @@ update: node_modules
 
 .PHONY: patch
 patch: node_modules test
-	npx versions -C patch
+	npx versions patch package.json package-lock.json
 	@$(MAKE) --no-print-directory publish
 
 .PHONY: minor
 minor: node_modules test
-	npx versions -C minor
+	npx versions minor package.json package-lock.json
 	@$(MAKE) --no-print-directory publish
 
 .PHONY: major
 major: node_modules test
-	npx versions -C major
+	npx versions major package.json package-lock.json
 	@$(MAKE) --no-print-directory publish
