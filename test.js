@@ -15,8 +15,8 @@ test("test", () => {
 
 test("correctness", () => {
   const now = Date.now();
-  for (let i = 0; i < 1000000; i++) {
-    const val = now - i * 100000;
+  for (let i = 0; i < 100000; i++) {
+    const val = now - i * 10000;
     const a = timerel(val);
     const b = format(val).replace("minute", "min").replace("second", "sec").replace("just ", "");
     expect(a).toEqual(b);
