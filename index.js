@@ -23,7 +23,8 @@ export function timerel(date, {noAffix = false} = {}) {
   if (diff < 10000) return "now";
 
   let num, suffix;
-  for (const time of times) {
+  for (let i = 0, len = times.length; i < len; i++) {
+    const time = times[i];
     if (diff >= time[1]) continue;
     num = Math.floor(diff / time[0]);
     suffix = time[2];
