@@ -9,6 +9,10 @@ lint: node_modules
 test: node_modules lint
 	npx vitest
 
+.PHONY: make bench
+bench: node_modules
+	@node bench.js
+
 .PHONY: publish
 publish: node_modules
 	git push -u --tags origin master
