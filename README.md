@@ -13,11 +13,12 @@ console.log(timerel(Date.now() - 1e6));
 ```
 
 ## API
-### timerel(date, {noAffix, times, nowThreshold})
+### timerel(date, {noAffix, times, nowThreshold, nowString})
 
-- `date` *String, Number or Date*: The date to format
-- `noAffix` *Boolean*: Whether to omit `ago` and `in` affixes. Default: `false`
+- `date` *String, Number or Date*: The date to format.
+- `noAffix` *Boolean*: Whether to omit `ago` and `in` affixes. Default: `false`.
 - `times` *Array*: A custom time table that overrides the built-in one.
 - `nowThreshold` *Number*: Number of milliseconds below which to output `"now"`. Default: 10000.
+- `nowString` *String*: String to output for now. Default: `"now"`.
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence
