@@ -13,7 +13,7 @@ console.log(timerel(Date.now() - 1e6));
 ```
 
 ## API
-### timerel(date, {noAffix} = {})
+### timerel(date, {noAffix, times, nowThreshold})
 
 - `date` *String, Number or Date*: The date to format
 - `noAffix` *Boolean*: Whether to omit `ago` and `in` affixes. Default: `false`
