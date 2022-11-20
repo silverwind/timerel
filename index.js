@@ -8,7 +8,7 @@ const table = [
   [31536000000, Infinity, "year"],
 ];
 
-export function timerel(date, {noAffix = false, times = table} = {}) {
+export function timerel(date, {noAffix = false, times = table, nowThreshold = 10000} = {}) {
   const ref = Date.now();
 
   date = typeof date === "number" ? date : Date.parse(date);
@@ -21,7 +21,7 @@ export function timerel(date, {noAffix = false, times = table} = {}) {
     future = true;
     diff = Math.abs(diff);
   }
-  if (diff < 10000) return "now";
+  if (diff < nowThreshold) return "now";
 
   let num, suffix;
   for (let i = 0, len = times.length; i < len; i++) {
