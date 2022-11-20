@@ -9,10 +9,11 @@ const times = [
 ];
 
 export function timerel(date, {noAffix = false} = {}) {
+  const ref = Date.now();
+
   date = typeof date === "number" ? date : Date.parse(date);
   if (Number.isNaN(date)) return "unknown";
 
-  const ref = Date.now();
   let future = false;
   let diff = ref - date;
 
@@ -27,8 +28,7 @@ export function timerel(date, {noAffix = false} = {}) {
     const time = times[i];
     if (diff >= time[1]) continue;
     num = Math.floor(diff / time[0]);
-    suffix = time[2];
-    if (num > 1) suffix += "s";
+    suffix = time[2] + (num > 1 ? "s" : "");
     break;
   }
 
