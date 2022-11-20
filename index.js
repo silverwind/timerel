@@ -1,4 +1,4 @@
-const times = [
+const table = [
   [1000, 60000, "sec"],
   [60000, 3600000, "min"],
   [3600000, 86400000, "hour"],
@@ -8,7 +8,7 @@ const times = [
   [31536000000, Infinity, "year"],
 ];
 
-export function timerel(date, {noAffix = false} = {}) {
+export function timerel(date, {noAffix = false, times = table} = {}) {
   const ref = Date.now();
 
   date = typeof date === "number" ? date : Date.parse(date);
