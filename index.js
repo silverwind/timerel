@@ -8,7 +8,7 @@ const defaultTimes = [
   [31536000000, Infinity, "year"],
 ];
 
-const defaultAliasMap = {
+const defaultAliasesMap = {
   "1 day ago": "yesterday",
   "1 week ago": "last week",
   "1 month ago": "last month",
@@ -19,7 +19,7 @@ const defaultAliasMap = {
   "in 1 year": "next year",
 };
 
-export function timerel(date, {noAffix = false, times = defaultTimes, nowThreshold = 10000, nowString = "now", aliases = false, aliasesMap = defaultAliasMap} = {}) {
+export function timerel(date, {noAffix = false, times = defaultTimes, nowThreshold = 10000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap} = {}) {
   const ref = Date.now();
 
   date = typeof date === "number" ? date : Date.parse(date);
