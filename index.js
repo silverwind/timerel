@@ -1,4 +1,4 @@
-const table = [
+const defaultTimes = [
   [1000, 60000, "sec"],
   [60000, 3600000, "min"],
   [3600000, 86400000, "hour"],
@@ -8,7 +8,18 @@ const table = [
   [31536000000, Infinity, "year"],
 ];
 
-export function timerel(date, {noAffix = false, times = table, nowThreshold = 10000, nowString = "now"} = {}) {
+const defaultAliasMap = {
+  "1 day ago": "yesterday",
+  "1 week ago": "last week",
+  "1 month ago": "last month",
+  "1 year ago": "last year",
+  "in 1 day": "tomorrow",
+  "in 1 week": "next week",
+  "in 1 month": "next month",
+  "in 1 year": "next year",
+};
+
+export function timerel(date, {noAffix = false, times = defaultTimes, nowThreshold = 10000, nowString = "now", aliases = false, aliasesMap = defaultAliasMap} = {}) {
   const ref = Date.now();
 
   date = typeof date === "number" ? date : Date.parse(date);
@@ -32,5 +43,7 @@ export function timerel(date, {noAffix = false, times = table, nowThreshold = 10
     break;
   }
 
-  return `${future && !noAffix ? "in " : ""}${num} ${suffix}${!future && !noAffix ? " ago" : ""}`;
+  const result = `${future && !noAffix ? "in " : ""}${num} ${suffix}${!future && !noAffix ? " ago" : ""}`;
+  if (!aliases) return result;
+  return aliasesMap[result] ?? result;
 }

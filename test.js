@@ -22,3 +22,9 @@ test("correctness", () => {
     expect(a).toEqual(b);
   }
 });
+
+test("aliases", () => {
+  const now = Date.now();
+  expect(timerel(now - 86400000, {aliases: true})).toEqual("yesterday");
+  expect(timerel(now + 86400000, {aliases: true})).toEqual("tomorrow");
+});
