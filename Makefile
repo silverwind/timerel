@@ -2,6 +2,7 @@ node_modules: package-lock.json
 	npm install --no-save
 	@touch node_modules
 
+.PHONY: lint
 lint: node_modules
 	npx eslint --color .
 
