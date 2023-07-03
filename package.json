@@ -1,6 +1,6 @@
 {
   "name": "timerel",
-  "version": "5.4.1",
+  "version": "5.4.2",
   "description": "Teeny-tiny relative date formatting",
   "author": "silverwind",
   "repository": "silverwind/timerel",
