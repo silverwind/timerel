@@ -1,11 +1,11 @@
 const defaultTimes = [
-  [1000, 60000, "sec"],
-  [60000, 3600000, "min"],
-  [3600000, 86400000, "hour"],
-  [86400000, 604800000, "day"],
-  [604800000, 2628000000, "week"],
-  [2628000000, 31536000000, "month"],
-  [31536000000, Infinity, "year"],
+  [1e3, 6e4, "sec"],
+  [6e4, 36e5, "min"],
+  [36e5, 864e5, "hour"],
+  [864e5, 6048e5, "day"],
+  [6048e5, 2628e6, "week"],
+  [2628e6, 31536e6, "month"],
+  [31536e6, Infinity, "year"],
 ];
 
 const defaultAliasesMap = {
@@ -19,14 +19,13 @@ const defaultAliasesMap = {
   "in 1 year": "next year",
 };
 
-export function timerel(date, {noAffix = false, times = defaultTimes, nowThreshold = 10000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap} = {}) {
-  const ref = Date.now();
-
+export function timerel(date, {now, noAffix = false, times = defaultTimes, nowThreshold = 10000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap} = {}) {
   date = typeof date === "number" ? date : Date.parse(date);
+  now = now ? (typeof now === "number" ? now : Date.parse(now)) : new Date();
   if (Number.isNaN(date)) return "unknown";
 
   let future = false;
-  let diff = ref - date;
+  let diff = now - date;
 
   if (diff < 0) {
     future = true;

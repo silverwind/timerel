@@ -11,6 +11,8 @@ test("test", () => {
     expect(timerel(date - i, {noAffix: true})).toMatch(/^([0-9]+ [a-z]+|now)/);
     expect(timerel(date + i, {noAffix: true})).toMatch(/^([0-9]+ [a-z]+|now)/);
   }
+
+  expect(timerel(new Date(0), {now: new Date(1000000)})).toEqual("16 mins ago");
 });
 
 test("correctness", () => {
