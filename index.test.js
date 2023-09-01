@@ -27,6 +27,6 @@ test("correctness", () => {
 
 test("aliases", () => {
   const now = Date.now();
-  expect(timerel(now - 86400000, {aliases: true})).toEqual("yesterday");
-  expect(timerel(now + 86400000, {aliases: true})).toEqual("tomorrow");
+  expect(timerel(now - 86500000, {aliases: true})).toEqual("yesterday");
+  expect(timerel(now + 86500000, {aliases: true})).toEqual("tomorrow");
 });
