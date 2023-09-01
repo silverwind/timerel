@@ -19,7 +19,7 @@ const defaultAliasesMap = {
   "in 1 year": "next year",
 };
 
-export function timerel(date, {now, noAffix = false, times = defaultTimes, nowThreshold = 10000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap} = {}) {
+export function timerel(date, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap} = {}) {
   date = typeof date === "number" ? date : Date.parse(date);
   now = now ? (typeof now === "number" ? now : Date.parse(now)) : new Date();
   if (Number.isNaN(date)) return "unknown";

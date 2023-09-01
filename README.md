@@ -19,7 +19,7 @@ console.log(timerel(Date.now() - 1e6));
 - `now` *String, Number or Date*: The date to compare to. Default: `Date.now()`.
 - `noAffix` *Boolean*: Whether to omit `ago` and `in` affixes. Default: `false`.
 - `times` *Array*: A custom time table that overrides the built-in one.
-- `nowThreshold` *Number*: Number of milliseconds below which to output `"now"`. Default: 10000.
+- `nowThreshold` *Number*: Number of milliseconds below which to output `"now"`. Default: 2000.
 - `nowString` *String*: String to output for now. Default: `"now"`.
 - `aliases` *Boolean*: Use aliases like "yesterday" instead of "1 day ago". Default: `false`.
 - `aliasesMap` *Object*: A custom aliases object to use instead of the built-in one.
