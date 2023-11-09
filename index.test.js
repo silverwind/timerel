@@ -1,7 +1,7 @@
 import {timerel} from "./index.js";
 import {format} from "timeago.js";
 
-test("test", () => {
+test("return value", () => {
   const date = Date.now();
   for (let i = 0; i < 1e6; i += 1e3) {
     expect(timerel(date - i)).toMatch(/^([0-9]+ [a-z]+ ago|now)/);
