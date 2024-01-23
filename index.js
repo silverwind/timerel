@@ -19,7 +19,12 @@ const defaultAliasesMap = {
   "in 1 year": "next year",
 };
 
-export function timerel(date, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap} = {}) {
+const longNames = {
+  sec: "second",
+  min: "minute",
+};
+
+export function timerel(date, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false} = {}) {
   date = typeof date === "number" ? date : Date.parse(date);
   now = now ? (typeof now === "number" ? now : Date.parse(now)) : new Date();
   if (Number.isNaN(date)) return "unknown";
@@ -38,7 +43,7 @@ export function timerel(date, {now, noAffix = false, times = defaultTimes, nowTh
     const time = times[i];
     if (diff >= time[1]) continue;
     num = Math.floor(diff / time[0]);
-    suffix = time[2] + (num > 1 ? "s" : "");
+    suffix = (longUnits ? longNames[time[2]] || time[2] : time[2]) + (num > 1 ? "s" : "");
     break;
   }
 

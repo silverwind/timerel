@@ -23,5 +23,6 @@ console.log(timerel(Date.now() - 1e6));
 - `nowString` *String*: String to output for now. Default: `"now"`.
 - `aliases` *Boolean*: Use aliases like "yesterday" instead of "1 day ago". Default: `false`.
 - `aliasesMap` *Object*: A custom aliases object to use instead of the built-in one.
+- `longUnits` *Boolean*: Use minutes/secoonds instead of mins/secs. Default: `false`.
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence

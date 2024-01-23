@@ -26,7 +26,11 @@ test("correctness", () => {
 });
 
 test("aliases", () => {
-  const now = Date.now();
-  expect(timerel(now - 86500000, {aliases: true})).toEqual("yesterday");
-  expect(timerel(now + 86500000, {aliases: true})).toEqual("tomorrow");
+  expect(timerel(Date.now() - 86500000, {aliases: true})).toEqual("yesterday");
+  expect(timerel(Date.now() + 86500000, {aliases: true})).toEqual("tomorrow");
+});
+
+test("longUnits", () => {
+  expect(timerel(Date.now() - 1e4, {longUnits: true})).toEqual("10 seconds ago");
+  expect(timerel(Date.now() - 1e6, {longUnits: true})).toEqual("16 minutes ago");
 });
