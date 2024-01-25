@@ -19,7 +19,7 @@ const defaultAliasesMap = {
   "in 1 year": "next year",
 };
 
-const longNames = {
+const longUnitsMap = {
   sec: "second",
   min: "minute",
 };
@@ -43,7 +43,7 @@ export function timerel(date, {now, noAffix = false, times = defaultTimes, nowTh
     const time = times[i];
     if (diff >= time[1]) continue;
     num = Math.floor(diff / time[0]);
-    suffix = (longUnits ? longNames[time[2]] || time[2] : time[2]) + (num > 1 ? "s" : "");
+    suffix = (longUnits ? longUnitsMap[time[2]] || time[2] : time[2]) + (num > 1 ? "s" : "");
     break;
   }
 
