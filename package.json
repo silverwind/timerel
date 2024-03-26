@@ -12,12 +12,12 @@
     "./index.js"
   ],
   "devDependencies": {
-    "eslint": "8.56.0",
-    "eslint-config-silverwind": "79.4.0",
+    "eslint": "8.57.0",
+    "eslint-config-silverwind": "82.0.6",
     "timeago.js": "4.0.2",
-    "updates": "15.1.1",
-    "versions": "12.0.0",
-    "vitest": "1.2.1",
-    "vitest-config-silverwind": "5.1.0"
+    "updates": "16.0.0",
+    "versions": "12.0.1",
+    "vitest": "1.4.0",
+    "vitest-config-silverwind": "7.0.3"
   }
 }
