@@ -6,10 +6,11 @@
   "repository": "silverwind/timerel",
   "license": "BSD-2-Clause",
   "type": "module",
-  "exports": "./index.js",
   "sideEffects": false,
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
-    "./index.js"
+    "dist"
   ],
   "devDependencies": {
     "@types/node": "20.12.8",
