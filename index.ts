@@ -1,4 +1,6 @@
-const defaultTimes = [
+type Times = Array<[number, number, string]>
+
+const defaultTimes: Times = [
   [1e3, 6e4, "sec"],
   [6e4, 36e5, "min"],
   [36e5, 864e5, "hour"],
@@ -8,7 +10,11 @@ const defaultTimes = [
   [31536e6, Infinity, "year"],
 ];
 
-const defaultAliasesMap = {
+type AliasesMap = {
+  [key: string]: string,
+}
+
+const defaultAliasesMap: AliasesMap = {
   "1 day ago": "yesterday",
   "1 week ago": "last week",
   "1 month ago": "last month",
@@ -19,14 +25,38 @@ const defaultAliasesMap = {
   "in 1 year": "next year",
 };
 
-const longUnitsMap = {
+type UnitsMap = {
+  [key: string]: string,
+}
+
+const longUnitsMap: UnitsMap = {
   sec: "second",
   min: "minute",
 };
 
-export function timerel(date, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false} = {}) {
-  date = typeof date === "number" ? date : Date.parse(date);
-  now = now ? (typeof now === "number" ? now : Date.parse(now)) : new Date();
+type TimeRelOpts = {
+  now?: Date | string | number,
+  noAffix?: boolean,
+  times?: Times,
+  nowThreshold?: number,
+  nowString?: string,
+  aliases?: boolean,
+  aliasesMap?: AliasesMap,
+  longUnits?: boolean,
+}
+
+function toNum(date: Date | string | number): number {
+  if (date instanceof Date) {
+    return date.getTime();
+  } else if (typeof date === "string") {
+    return Date.parse(date);
+  }
+  return date;
+}
+
+export function timerel(date: Date | string | number, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimeRelOpts = {}) {
+  date = toNum(date);
+  now = now !== undefined ? toNum(now) : Date.now();
   if (Number.isNaN(date)) return "unknown";
 
   let future = false;

@@ -1,4 +1,4 @@
-import {timerel} from "./index.js";
+import {timerel} from "./index.ts";
 import {format} from "timeago.js";
 
 test("return value", () => {
