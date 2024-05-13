@@ -1,6 +1,6 @@
-type Times = Array<[number, number, string]>
+export type TimesArray = Array<[number, number, string]> // eslint-disable-line i/no-unused-modules
 
-const defaultTimes: Times = [
+const defaultTimes: TimesArray = [
   [1e3, 6e4, "sec"],
   [6e4, 36e5, "min"],
   [36e5, 864e5, "hour"],
@@ -10,7 +10,7 @@ const defaultTimes: Times = [
   [31536e6, Infinity, "year"],
 ];
 
-type AliasesMap = {
+export type AliasesMap = { // eslint-disable-line i/no-unused-modules
   [key: string]: string,
 }
 
@@ -25,7 +25,7 @@ const defaultAliasesMap: AliasesMap = {
   "in 1 year": "next year",
 };
 
-type UnitsMap = {
+export type UnitsMap = { // eslint-disable-line i/no-unused-modules
   [key: string]: string,
 }
 
@@ -34,10 +34,10 @@ const longUnitsMap: UnitsMap = {
   min: "minute",
 };
 
-type TimeRelOpts = {
+export type TimeRelOpts = { // eslint-disable-line i/no-unused-modules
   now?: Date | string | number,
   noAffix?: boolean,
-  times?: Times,
+  times?: TimesArray,
   nowThreshold?: number,
   nowString?: string,
   aliases?: boolean,
