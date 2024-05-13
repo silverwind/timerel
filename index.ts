@@ -1,3 +1,4 @@
+export type TimerelAnyDate = string | number | Date; // eslint-disable-line i/no-unused-modules
 export type TimesArray = Array<[number, number, string]> // eslint-disable-line i/no-unused-modules
 
 const defaultTimes: TimesArray = [
@@ -34,7 +35,7 @@ const longUnitsMap: UnitsMap = {
   min: "minute",
 };
 
-export type TimeRelOpts = { // eslint-disable-line i/no-unused-modules
+export type TimerelOpts = { // eslint-disable-line i/no-unused-modules
   now?: Date | string | number,
   noAffix?: boolean,
   times?: TimesArray,
@@ -45,7 +46,7 @@ export type TimeRelOpts = { // eslint-disable-line i/no-unused-modules
   longUnits?: boolean,
 }
 
-function toNum(date: Date | string | number): number {
+function toNum(date: TimerelAnyDate): number {
   if (date instanceof Date) {
     return date.getTime();
   } else if (typeof date === "string") {
@@ -54,7 +55,7 @@ function toNum(date: Date | string | number): number {
   return date;
 }
 
-export function timerel(date: Date | string | number, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimeRelOpts = {}) {
+export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}) {
   date = toNum(date);
   now = now !== undefined ? toNum(now) : Date.now();
   if (Number.isNaN(date)) return "unknown";
