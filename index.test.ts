@@ -34,3 +34,7 @@ test("longUnits", () => {
   expect(timerel(Date.now() - 1e4, {longUnits: true})).toEqual("10 seconds ago");
   expect(timerel(Date.now() - 1e6, {longUnits: true})).toEqual("16 minutes ago");
 });
+
+test("unknown", () => {
+  expect(timerel("foo")).toEqual("foo");
+});

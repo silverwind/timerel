@@ -56,12 +56,12 @@ function toNum(date: TimerelAnyDate): number {
 }
 
 export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}) {
-  date = toNum(date);
+  const dateObj = toNum(date);
   now = now !== undefined ? toNum(now) : Date.now();
-  if (Number.isNaN(date)) return "unknown";
+  if (Number.isNaN(dateObj)) return String(date);
 
   let future = false;
-  let diff = now - date;
+  let diff = now - dateObj;
 
   if (diff < 0) {
     future = true;
