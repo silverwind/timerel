@@ -37,4 +37,5 @@ test("longUnits", () => {
 
 test("unknown", () => {
   expect(timerel("foo")).toEqual("foo");
+  expect(timerel("foo", {unknownString: "unknown"})).toEqual("unknown");
 });

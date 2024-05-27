@@ -36,13 +36,23 @@ const longUnitsMap: UnitsMap = {
 };
 
 export type TimerelOpts = { // eslint-disable-line i/no-unused-modules
+  /** The date to compare to. Default: `Date.now()`. */
   now?: Date | string | number,
+  /** Whether to omit `ago` and `in` affixes. Default: `false`. **/
   noAffix?: boolean,
+  /** A custom time table that overrides the built-in one. **/
   times?: TimesArray,
+  /** Number of milliseconds below which to output `"now"`. Default: 2000. */
   nowThreshold?: number,
+  /** String to output for now. Default: `"now"`. */
   nowString?: string,
+  /** String to output for invalid dates. Default: `String(date)`. */
+  unknownString?: string,
+  /** Use aliases like "yesterday" instead of "1 day ago". Default: `false`. */
   aliases?: boolean,
+  /** A custom aliases object to use instead of the built-in one. */
   aliasesMap?: AliasesMap,
+  /** Use minutes/secoonds instead of mins/secs. Default: `false`. */
   longUnits?: boolean,
 }
 
@@ -55,10 +65,10 @@ function toNum(date: TimerelAnyDate): number {
   return date;
 }
 
-export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}) {
+export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString = "", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}) {
   const dateObj = toNum(date);
   now = now !== undefined ? toNum(now) : Date.now();
-  if (Number.isNaN(dateObj)) return String(date);
+  if (Number.isNaN(dateObj)) return unknownString || String(date);
 
   let future = false;
   let diff = now - dateObj;
