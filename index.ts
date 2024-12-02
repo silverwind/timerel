@@ -1,5 +1,5 @@
-export type TimerelAnyDate = string | number | Date; // eslint-disable-line i/no-unused-modules
-export type TimesArray = Array<[number, number, string]> // eslint-disable-line i/no-unused-modules
+export type TimerelAnyDate = string | number | Date;
+export type TimesArray = Array<[number, number, string]>;
 
 const defaultTimes: TimesArray = [
   [1e3, 6e4, "sec"],
@@ -11,7 +11,7 @@ const defaultTimes: TimesArray = [
   [31536e6, Infinity, "year"],
 ];
 
-export type AliasesMap = { // eslint-disable-line i/no-unused-modules
+export type AliasesMap = {
   [key: string]: string,
 }
 
@@ -26,7 +26,7 @@ const defaultAliasesMap: AliasesMap = {
   "in 1 year": "next year",
 };
 
-export type UnitsMap = { // eslint-disable-line i/no-unused-modules
+export type UnitsMap = {
   [key: string]: string,
 }
 
@@ -35,7 +35,7 @@ const longUnitsMap: UnitsMap = {
   min: "minute",
 };
 
-export type TimerelOpts = { // eslint-disable-line i/no-unused-modules
+export type TimerelOpts = {
   /** The date to compare to. Default: `Date.now()`. */
   now?: Date | string | number,
   /** Whether to omit `ago` and `in` affixes. Default: `false`. **/

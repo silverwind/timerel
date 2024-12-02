@@ -14,18 +14,18 @@
     "dist"
   ],
   "devDependencies": {
-    "@types/node": "20.12.12",
+    "@types/node": "22.10.1",
     "eslint": "8.57.0",
-    "eslint-config-silverwind": "85.1.4",
-    "eslint-config-silverwind-typescript": "3.2.7",
+    "eslint-config-silverwind": "94.2.1",
+    "eslint-config-silverwind-typescript": "9.2.0",
     "timeago.js": "4.0.2",
-    "typescript": "5.4.5",
-    "typescript-config-silverwind": "4.3.2",
-    "updates": "16.1.1",
-    "versions": "12.1.1",
-    "vite": "5.2.11",
-    "vite-config-silverwind": "2.1.1",
-    "vitest": "1.6.0",
-    "vitest-config-silverwind": "9.0.6"
+    "typescript": "5.7.2",
+    "typescript-config-silverwind": "6.1.1",
+    "updates": "16.4.0",
+    "versions": "12.1.2",
+    "vite": "6.0.2",
+    "vite-config-silverwind": "3.1.0",
+    "vitest": "2.1.6",
+    "vitest-config-silverwind": "9.2.0"
   }
 }
