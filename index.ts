@@ -79,7 +79,8 @@ export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = def
   }
   if (diff < nowThreshold) return nowString;
 
-  let num, suffix;
+  let num: number = 0;
+  let suffix: string = "";
   for (let i = 0, len = times.length; i < len; i++) {
     const time = times[i];
     if (diff >= time[1]) continue;
