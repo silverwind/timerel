@@ -13,7 +13,7 @@ const defaultTimes: TimesArray = [
 
 export type AliasesMap = {
   [key: string]: string,
-}
+};
 
 const defaultAliasesMap: AliasesMap = {
   "1 day ago": "yesterday",
@@ -28,7 +28,7 @@ const defaultAliasesMap: AliasesMap = {
 
 export type UnitsMap = {
   [key: string]: string,
-}
+};
 
 const longUnitsMap: UnitsMap = {
   sec: "second",
@@ -54,7 +54,7 @@ export type TimerelOpts = {
   aliasesMap?: AliasesMap,
   /** Use minutes/secoonds instead of mins/secs. Default: `false`. */
   longUnits?: boolean,
-}
+};
 
 function toNum(date: TimerelAnyDate): number {
   if (date instanceof Date) {
