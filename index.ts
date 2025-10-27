@@ -65,6 +65,7 @@ function toNum(date: TimerelAnyDate): number {
   return date;
 }
 
+/** Format a date to a relative time format */
 export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString = "", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}) {
   const dateObj = toNum(date);
   now = now !== undefined ? toNum(now) : Date.now();
