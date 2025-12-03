@@ -11,9 +11,7 @@ const defaultTimes: TimesArray = [
   [31536e6, Infinity, "year"],
 ];
 
-export type AliasesMap = {
-  [key: string]: string,
-};
+export type AliasesMap = Record<string, string>;
 
 const defaultAliasesMap: AliasesMap = {
   "1 day ago": "yesterday",
@@ -26,9 +24,7 @@ const defaultAliasesMap: AliasesMap = {
   "in 1 year": "next year",
 };
 
-export type UnitsMap = {
-  [key: string]: string,
-};
+export type UnitsMap = Record<string, string>;
 
 const longUnitsMap: UnitsMap = {
   sec: "second",
@@ -66,7 +62,7 @@ function toNum(date: TimerelAnyDate): number {
 }
 
 /** Format a date to a relative time format */
-export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString = "", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}) {
+export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString = "", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}): string {
   const dateObj = toNum(date);
   now = now !== undefined ? toNum(now) : Date.now();
   if (Number.isNaN(dateObj)) return unknownString || String(date);
@@ -91,6 +87,5 @@ export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = def
   }
 
   const result = `${future && !noAffix ? "in " : ""}${num} ${suffix}${!future && !noAffix ? " ago" : ""}`;
-  if (!aliases) return result;
-  return aliasesMap[result] ?? result;
+  return aliases ? (aliasesMap[result] ?? result) : result;
 }
