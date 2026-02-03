@@ -12,6 +12,15 @@ console.log(timerel(Date.now() - 1e6));
 // => 16 mins ago
 ```
 
+When formatting multiple dates in a loop, pass `{now: Date.now()}` to avoid repeated `Date.now()` calls internally:
+
+```ts
+const now = Date.now();
+for (const date of dates) {
+  console.log(timerel(date, {now}));
+}
+```
+
 ## API
 ### timerel(date, opts?)
 
