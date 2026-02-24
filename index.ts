@@ -53,27 +53,20 @@ export type TimerelOpts = {
 };
 
 function toNum(date: TimerelAnyDate): number {
-  if (date instanceof Date) {
-    return date.getTime();
-  } else if (typeof date === "string") {
-    return Date.parse(date);
-  }
+  if (date instanceof Date) return date.getTime();
+  if (typeof date === "string") return Date.parse(date);
   return date;
 }
 
 /** Format a date to a relative time format */
 export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString = "", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}): string {
   const dateObj = toNum(date);
-  now = now !== undefined ? toNum(now) : Date.now();
-  if (Number.isNaN(dateObj)) return unknownString || String(date);
+  const nowMs = now !== undefined ? toNum(now) : Date.now();
+  if (dateObj !== dateObj) return unknownString || String(date); // eslint-disable-line no-self-compare
 
-  let future = false;
-  let diff = now - dateObj;
-
-  if (diff < 0) {
-    future = true;
-    diff = Math.abs(diff);
-  }
+  let diff = nowMs - dateObj;
+  const future = diff < 0;
+  if (future) diff = -diff;
   if (diff < nowThreshold) return nowString;
 
   let num: number = 0;
@@ -81,11 +74,19 @@ export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = def
   for (let i = 0, len = times.length; i < len; i++) {
     const time = times[i];
     if (diff >= time[1]) continue;
-    num = Math.floor(diff / time[0]);
+    num = (diff / time[0]) | 0; // eslint-disable-line unicorn/prefer-math-trunc
     suffix = (longUnits ? longUnitsMap[time[2]] || time[2] : time[2]) + (num > 1 ? "s" : "");
     break;
   }
 
-  const result = `${future && !noAffix ? "in " : ""}${num} ${suffix}${!future && !noAffix ? " ago" : ""}`;
+  const base = `${num} ${suffix}`;
+  let result: string;
+  if (noAffix) {
+    result = base;
+  } else if (future) {
+    result = `in ${base}`;
+  } else {
+    result = `${base} ago`;
+  }
   return aliases ? (aliasesMap[result] ?? result) : result;
 }
