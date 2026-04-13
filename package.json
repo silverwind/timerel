@@ -19,6 +19,7 @@
     "@typescript/native-preview": "7.0.0-dev.20260413.1",
     "eslint": "9.39.4",
     "eslint-config-silverwind": "131.0.4",
+    "jest-extended": "7.0.0",
     "timeago.js": "4.0.2",
     "tsdown": "0.21.7",
     "tsdown-config-silverwind": "2.0.5",
