@@ -33,7 +33,7 @@ const longUnitsMap: UnitsMap = {
 
 export type TimerelOpts = {
   /** The date to compare to. Default: `Date.now()`. */
-  now?: Date | string | number,
+  now?: TimerelAnyDate,
   /** Whether to omit `ago` and `in` affixes. Default: `false`. **/
   noAffix?: boolean,
   /** A custom time table that overrides the built-in one. **/
@@ -48,45 +48,36 @@ export type TimerelOpts = {
   aliases?: boolean,
   /** A custom aliases object to use instead of the built-in one. */
   aliasesMap?: AliasesMap,
-  /** Use minutes/secoonds instead of mins/secs. Default: `false`. */
+  /** Use minutes/seconds instead of mins/secs. Default: `false`. */
   longUnits?: boolean,
 };
 
 function toNum(date: TimerelAnyDate): number {
+  if (typeof date === "number") return date;
   if (date instanceof Date) return date.getTime();
-  if (typeof date === "string") return Date.parse(date);
-  return date;
+  return Date.parse(date);
 }
 
 /** Format a date to a relative time format */
 export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString = "", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}): string {
-  const dateObj = toNum(date);
-  const nowMs = now !== undefined ? toNum(now) : Date.now();
-  if (dateObj !== dateObj) return unknownString || String(date); // eslint-disable-line no-self-compare
+  let diff = (now === undefined ? Date.now() : toNum(now)) - toNum(date);
+  if (Number.isNaN(diff)) return unknownString || String(date);
 
-  let diff = nowMs - dateObj;
   const future = diff < 0;
   if (future) diff = -diff;
   if (diff < nowThreshold) return nowString;
 
-  let num: number = 0;
-  let suffix: string = "";
-  for (let i = 0, len = times.length; i < len; i++) {
-    const time = times[i];
+  let num = 0;
+  let suffix = "";
+  for (let index = 0, len = times.length; index < len; index++) {
+    const time = times[index];
     if (diff >= time[1]) continue;
-    num = (diff / time[0]) | 0; // eslint-disable-line unicorn/prefer-math-trunc
+    num = Math.trunc(diff / time[0]);
     suffix = (longUnits ? longUnitsMap[time[2]] || time[2] : time[2]) + (num > 1 ? "s" : "");
     break;
   }
 
   const base = `${num} ${suffix}`;
-  let result: string;
-  if (noAffix) {
-    result = base;
-  } else if (future) {
-    result = `in ${base}`;
-  } else {
-    result = `${base} ago`;
-  }
+  const result = noAffix ? base : future ? `in ${base}` : `${base} ago`;
   return aliases ? (aliasesMap[result] ?? result) : result;
 }

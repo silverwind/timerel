@@ -36,6 +36,6 @@ for (const date of dates) {
 - `unknownString` *String*: String to output for invalid dates. Default: `String(date)`.
 - `aliases` *Boolean*: Use aliases like "yesterday" instead of "1 day ago". Default: `false`.
 - `aliasesMap` *Object*: A custom aliases object to use instead of the built-in one.
-- `longUnits` *Boolean*: Use minutes/secoonds instead of mins/secs. Default: `false`.
+- `longUnits` *Boolean*: Use minutes/seconds instead of mins/secs. Default: `false`.
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence
