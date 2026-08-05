@@ -30,12 +30,13 @@ for (const date of dates) {
 
 - `now` *String, Number or Date*: The date to compare to. Default: `Date.now()`.
 - `noAffix` *Boolean*: Whether to omit `ago` and `in` affixes. Default: `false`.
-- `times` *Array*: A custom time table that overrides the built-in one.
+- `times` *Array*: A custom time table that overrides the built-in one. Entries are `[msPerUnit, maxMs, unit, shortUnit?, longUnit?]`, the optional labels fall back to `unit`.
 - `nowThreshold` *Number*: Number of milliseconds below which to output `"now"`. Default: 2000.
 - `nowString` *String*: String to output for now. Default: `"now"`.
 - `unknownString` *String*: String to output for invalid dates. Default: `String(date)`.
 - `aliases` *Boolean*: Use aliases like "yesterday" instead of "1 day ago". Default: `false`.
 - `aliasesMap` *Object*: A custom aliases object to use instead of the built-in one.
 - `longUnits` *Boolean*: Use minutes/seconds instead of mins/secs. Default: `false`.
+- `shortUnits` *Boolean*: Use short units like `1d ago`, overriding `longUnits`. Built-in aliases do not match. Default: `false`.
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence

@@ -1,14 +1,14 @@
 export type TimerelAnyDate = string | number | Date;
-export type TimesArray = Array<[number, number, string]>;
+export type TimesArray = Array<[number, number, string, string?, string?]>;
 
 const defaultTimes: TimesArray = [
-  [1e3, 6e4, "sec"],
-  [6e4, 36e5, "min"],
-  [36e5, 864e5, "hour"],
-  [864e5, 6048e5, "day"],
-  [6048e5, 2628e6, "week"],
-  [2628e6, 31536e6, "month"],
-  [31536e6, Infinity, "year"],
+  [1e3, 6e4, "sec", "s", "second"],
+  [6e4, 36e5, "min", "m", "minute"],
+  [36e5, 864e5, "hour", "h"],
+  [864e5, 6048e5, "day", "d"],
+  [6048e5, 2628e6, "week", "w"],
+  [2628e6, 31536e6, "month", "mo"],
+  [31536e6, Infinity, "year", "y"],
 ];
 
 export type AliasesMap = Record<string, string>;
@@ -26,17 +26,12 @@ const defaultAliasesMap: AliasesMap = {
 
 export type UnitsMap = Record<string, string>;
 
-const longUnitsMap: UnitsMap = {
-  sec: "second",
-  min: "minute",
-};
-
 export type TimerelOpts = {
   /** The date to compare to. Default: `Date.now()`. */
   now?: TimerelAnyDate,
   /** Whether to omit `ago` and `in` affixes. Default: `false`. **/
   noAffix?: boolean,
-  /** A custom time table that overrides the built-in one. **/
+  /** A custom time table of `[msPerUnit, maxMs, unit, shortUnit?, longUnit?]` entries. **/
   times?: TimesArray,
   /** Number of milliseconds below which to output `"now"`. Default: 2000. */
   nowThreshold?: number,
@@ -50,6 +45,8 @@ export type TimerelOpts = {
   aliasesMap?: AliasesMap,
   /** Use minutes/seconds instead of mins/secs. Default: `false`. */
   longUnits?: boolean,
+  /** Use short units like `1d`, overriding `longUnits`. Default: `false`. */
+  shortUnits?: boolean,
 };
 
 function toNum(date: TimerelAnyDate): number {
@@ -59,7 +56,7 @@ function toNum(date: TimerelAnyDate): number {
 }
 
 /** Format a date to a relative time format */
-export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString = "", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false}: TimerelOpts = {}): string {
+export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString = "", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false, shortUnits = false}: TimerelOpts = {}): string {
   let diff = (now === undefined ? Date.now() : toNum(now)) - toNum(date);
   if (Number.isNaN(diff)) return unknownString || String(date);
 
@@ -67,17 +64,15 @@ export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = def
   if (future) diff = -diff;
   if (diff < nowThreshold) return nowString;
 
-  let num = 0;
-  let suffix = "";
+  let base = "";
   for (let index = 0, len = times.length; index < len; index++) {
     const time = times[index];
     if (diff >= time[1]) continue;
-    num = Math.trunc(diff / time[0]);
-    suffix = (longUnits ? longUnitsMap[time[2]] || time[2] : time[2]) + (num > 1 ? "s" : "");
+    const num = Math.trunc(diff / time[0]);
+    base = shortUnits ? `${num}${time[3] || time[2]}` : `${num} ${longUnits && time[4] || time[2]}${num > 1 ? "s" : ""}`;
     break;
   }
 
-  const base = `${num} ${suffix}`;
   const result = noAffix ? base : future ? `in ${base}` : `${base} ago`;
   return aliases ? (aliasesMap[result] ?? result) : result;
 }

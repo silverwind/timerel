@@ -1,4 +1,4 @@
-import {timerel} from "./index.ts";
+import {timerel, type TimesArray} from "./index.ts";
 import {format} from "timeago.js";
 
 test("return value", () => {
@@ -33,6 +33,16 @@ test("aliases", () => {
 test("longUnits", () => {
   expect(timerel(Date.now() - 1e4, {longUnits: true})).toEqual("10 seconds ago");
   expect(timerel(Date.now() - 1e6, {longUnits: true})).toEqual("16 minutes ago");
+  expect(timerel(Date.now() - 1e4, {longUnits: true, times: [[1e3, Infinity, "sec", "s", "sekunde"]]})).toEqual("10 sekundes ago");
+});
+
+test("shortUnits", () => {
+  expect(timerel(Date.now() - 1e4, {shortUnits: true})).toEqual("10s ago");
+  expect(timerel(Date.now() - 2628e6, {shortUnits: true})).toEqual("1mo ago");
+
+  const times: TimesArray = [[1e3, 6e4, "sec", "sek"], [6e4, Infinity, "min"]];
+  expect(timerel(Date.now() - 1e4, {shortUnits: true, times})).toEqual("10sek ago");
+  expect(timerel(Date.now() - 1e6, {shortUnits: true, times})).toEqual("16min ago");
 });
 
 test("unknown", () => {
