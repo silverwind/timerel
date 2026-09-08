@@ -16,6 +16,15 @@ test("return value", () => {
 });
 
 test("correctness", () => {
+  for (const [duration, unit] of [
+    [86400000, "day"],
+    [604800000, "week"],
+    [2628000000, "month"],
+    [31536000000, "year"],
+  ] as const) {
+    expect(timerel(-duration * 2, {now: 0})).toEqual(`2 ${unit}s ago`);
+  }
+
   const now = Date.now();
   for (let i = 0; i < 10000; i++) {
     const val = now - i * 10000;
@@ -40,9 +49,9 @@ test("shortUnits", () => {
   expect(timerel(Date.now() - 1e4, {shortUnits: true})).toEqual("10s ago");
   expect(timerel(Date.now() - 2628e6, {shortUnits: true})).toEqual("1mo ago");
 
-  const times: TimesArray = [[1e3, 6e4, "sec", "sek"], [6e4, Infinity, "min"]];
-  expect(timerel(Date.now() - 1e4, {shortUnits: true, times})).toEqual("10sek ago");
-  expect(timerel(Date.now() - 1e6, {shortUnits: true, times})).toEqual("16min ago");
+  const times: TimesArray = [[2e3, 6e4, "sec", "sek"], [9e4, Infinity, "min"]];
+  expect(timerel(-1e4, {now: 0, shortUnits: true, times})).toEqual("5sek ago");
+  expect(timerel(-1e6, {now: 0, shortUnits: true, times})).toEqual("11min ago");
 });
 
 test("unknown", () => {
