@@ -3,7 +3,10 @@
   "version": "5.9.0",
   "description": "Teeny-tiny relative date formatting",
   "author": "silverwind",
-  "repository": "silverwind/timerel",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silverwind/timerel.git"
+  },
   "license": "BSD-2-Clause",
   "packageManager": "pnpm@12.3.4",
   "type": "module",
