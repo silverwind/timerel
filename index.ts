@@ -29,9 +29,9 @@ export type UnitsMap = Record<string, string>;
 export type TimerelOpts = {
   /** The date to compare to. Default: `Date.now()`. */
   now?: TimerelAnyDate,
-  /** Whether to omit `ago` and `in` affixes. Default: `false`. **/
+  /** Whether to omit `ago` and `in` affixes. Default: `false`. */
   noAffix?: boolean,
-  /** A custom time table of `[msPerUnit, maxMs, unit, shortUnit?, longUnit?]` entries. **/
+  /** A custom time table of `[msPerUnit, maxMs, unit, shortUnit?, longUnit?]` entries. */
   times?: TimesArray,
   /** Number of milliseconds below which to output `"now"`. Default: 2000. */
   nowThreshold?: number,
@@ -56,7 +56,7 @@ function toNum(date: TimerelAnyDate): number {
 }
 
 /** Format a date to a relative time format */
-export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString = "", aliases = false, aliasesMap = defaultAliasesMap, longUnits = false, shortUnits = false}: TimerelOpts = {}): string {
+export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString, aliases = false, aliasesMap = defaultAliasesMap, longUnits = false, shortUnits = false}: TimerelOpts = {}): string {
   let diff = (now === undefined ? Date.now() : toNum(now)) - toNum(date);
   if (Number.isNaN(diff)) return unknownString || String(date);
 
