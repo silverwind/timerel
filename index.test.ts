@@ -13,6 +13,8 @@ test("return value", () => {
   }
 
   expect(timerel(new Date(0), {now: new Date(1000000)})).toEqual("16 mins ago");
+  expect(timerel(0, {now: 0, nowThreshold: 0})).toEqual("0 secs ago");
+  expect(timerel(0, {now: 500, nowThreshold: 0, longUnits: true})).toEqual("0 seconds ago");
 });
 
 test("correctness", () => {

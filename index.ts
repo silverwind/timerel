@@ -69,7 +69,7 @@ export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = def
     const time = times[index];
     if (diff >= time[1]) continue;
     const num = Math.trunc(diff / time[0]);
-    base = shortUnits ? `${num}${time[3] || time[2]}` : `${num} ${longUnits && time[4] || time[2]}${num > 1 ? "s" : ""}`;
+    base = shortUnits ? `${num}${time[3] || time[2]}` : `${num} ${longUnits && time[4] || time[2]}${num === 1 ? "" : "s"}`;
     break;
   }
 
