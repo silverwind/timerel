@@ -1,9 +1,13 @@
 # timerel
 [![](https://img.shields.io/npm/v/timerel.svg?style=flat)](https://www.npmjs.org/package/timerel) [![](https://img.shields.io/npm/dm/timerel.svg)](https://www.npmjs.org/package/timerel) [![](https://img.shields.io/bundlephobia/minzip/timerel.svg)](https://bundlephobia.com/package/timerel) [![](https://packagephobia.com/badge?p=timerel)](https://packagephobia.com/result?p=timerel)
 
-`timerel` formats dates to short english relative format `5 mins ago` and does so around [11 times faster](./bench.ts) than [its competition](https://github.com/hustcc/timeago.js).
+`timerel` formats dates to short English relative format `5 mins ago` and does so around [11 times faster](./bench.ts) than [its competition](https://github.com/hustcc/timeago.js).
 
 ## Usage
+
+```sh
+pnpm add timerel
+```
 
 ```ts
 import {timerel} from "timerel";
