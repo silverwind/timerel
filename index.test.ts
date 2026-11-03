@@ -20,7 +20,7 @@ test("correctness", () => {
 
 test("exact outputs", () => {
   const now = Date.now();
-  const times: TimesArray = [[2e3, 6e4, "sec", "sek"], [9e4, Infinity, "min"]];
+  const times: TimesArray = [[36e5, "minute"], [Infinity, "hour"]];
   const cases: Array<[TimerelAnyDate, TimerelOpts | undefined, string]> = [
     [new Date(0), {now: new Date(1000000)}, "16 mins ago"],
     [0, {now: 0, nowThreshold: 0}, "0 secs ago"],
@@ -33,11 +33,11 @@ test("exact outputs", () => {
     [now + 86500000, {aliases: true}, "tomorrow"],
     [now - 1e4, {longUnits: true}, "10 seconds ago"],
     [now - 1e6, {longUnits: true}, "16 minutes ago"],
-    [now - 1e4, {longUnits: true, times: [[1e3, Infinity, "sec", "s", "sekunde"]]}, "10 sekundes ago"],
     [now - 1e4, {shortUnits: true}, "10s ago"],
     [now - 2628e6, {shortUnits: true}, "1mo ago"],
-    [-1e4, {now: 0, shortUnits: true, times}, "5sek ago"],
-    [-1e6, {now: 0, shortUnits: true, times}, "11min ago"],
+    [-1e6, {now: 0, shortUnits: true, times}, "16m ago"],
+    [-2 * 864e5, {now: 0, times}, "48 hours ago"],
+    [-2 * 7884e6, {now: 0, times: [[Infinity, "quarter"]]}, "2 quarters ago"],
     [-3e5, {now: 0, locale: "de"}, "vor 5 Min."],
     [108e5, {now: 0, locale: "de", longUnits: true}, "in 3 Stunden"],
     [-3e5, {now: 0, locale: "de", noAffix: true}, "5 Min."],
@@ -47,7 +47,7 @@ test("exact outputs", () => {
     [-500, {now: 0, nowThreshold: 0, locale: "de", longUnits: true}, "vor 0 Sekunden"],
     [500, {now: 0, nowThreshold: 0, locale: "de", longUnits: true}, "in 0 Sekunden"],
     [-864e5, {now: 0, locale: "de", aliases: true}, "gestern"],
-    [-1e4, {now: 0, locale: "de", shortUnits: true, times: [[2e3, Infinity, "sec", "s", "second"]]}, "vor 5 s"],
+    [-2 * 864e5, {now: 0, locale: "de", times}, "vor 48 Std."],
     [-3e5, {now: 0, locale: ["de-AT", "en"]}, "vor 5 Min."],
     ["foo", {locale: "de"}, "foo"],
     ["foo", undefined, "foo"],

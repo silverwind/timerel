@@ -34,7 +34,7 @@ for (const date of dates) {
 
 - `now` *String, Number or Date*: The date to compare to. Default: `Date.now()`.
 - `noAffix` *Boolean*: Whether to omit `ago` and `in` affixes. Default: `false`.
-- `times` *Array*: A custom time table that overrides the built-in one. Entries are `[msPerUnit, maxMs, unit, shortUnit?, longUnit?]`, the optional labels fall back to `unit`.
+- `times` *Array*: A custom time table that overrides the built-in one. Entries are `[maxMs, unit]`, ascending by `maxMs`, where `unit` is one of `second`, `minute`, `hour`, `day`, `week`, `month`, `quarter` or `year`.
 - `nowThreshold` *Number*: Number of milliseconds below which to output `"now"`. Default: 2000.
 - `nowString` *String*: String to output for now. Default: `"now"`, localized for other locales.
 - `unknownString` *String*: String to output for invalid dates. Default: `String(date)`.
@@ -42,6 +42,6 @@ for (const date of dates) {
 - `aliasesMap` *Object*: A custom aliases object to use instead of the built-in one. Unused for other locales.
 - `longUnits` *Boolean*: Use minutes/seconds instead of mins/secs. Default: `false`.
 - `shortUnits` *Boolean*: Use short units like `1d ago`, overriding `longUnits`. Built-in aliases do not match. Default: `false`.
-- `locale` *String, Array or Intl.Locale*: Locale like `"de"`, formatted via `Intl` unless `"en"`. `times` entries then need a `longUnit` or `unit` that `Intl` accepts. Default: `"en"`.
+- `locale` *String, Array or Intl.Locale*: Locale like `"de"`, formatted via `Intl` unless `"en"`. Default: `"en"`.
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence
