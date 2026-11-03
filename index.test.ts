@@ -43,7 +43,7 @@ test("exact outputs", () => {
     [-3e5, {now: 0, locale: "de", noAffix: true}, "5 Min."],
     [3e5, {now: 0, locale: "de", noAffix: true}, "5 Min."],
     [-1e3, {now: 0, locale: "de"}, "jetzt"],
-    [-1e3, {now: 0, locale: "de", nowString: "eben"}, "eben"],
+    [-1e3, {now: 0, locale: "de", nowString: "soeben"}, "soeben"],
     [-500, {now: 0, nowThreshold: 0, locale: "de", longUnits: true}, "vor 0 Sekunden"],
     [500, {now: 0, nowThreshold: 0, locale: "de", longUnits: true}, "in 0 Sekunden"],
     [-864e5, {now: 0, locale: "de", aliases: true}, "gestern"],
