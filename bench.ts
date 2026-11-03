@@ -24,6 +24,7 @@ const now = Date.now();
 const ops = 1e6;
 
 bench("timerel", ops, (i) => timerel(now - i * 100000));
+bench("timerel de", ops, (i) => timerel(now - i * 100000, {now, locale: "de"}));
 bench("timeago", ops, (i) => format(now - i * 100000));
 
 if (sink === undefined) console.error("sink is empty, results were optimized away");

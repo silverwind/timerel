@@ -47,7 +47,20 @@ export type TimerelOpts = {
   longUnits?: boolean,
   /** Use short units like `1d`, overriding `longUnits`. Default: `false`. */
   shortUnits?: boolean,
+  /** Locale other than `"en"` formats via `Intl`, `times` entries then need a `longUnit` or `unit` valid for `Intl`. Default: `"en"`. */
+  locale?: Intl.LocalesArgument,
 };
+
+type IntlOpts = Required<Pick<TimerelOpts, "times" | "locale" | "noAffix" | "aliases">> & {style: Intl.RelativeTimeFormatStyle};
+
+const formatters = new Map<string, Intl.RelativeTimeFormat | Intl.NumberFormat>();
+const resultsByTimes = new WeakMap<TimesArray, Map<string, Map<number, string>>>();
+let last: IntlOpts & {results: Map<number, string>} | undefined; // skips the keyed lookup when options repeat
+
+function getFormatter<T extends Intl.RelativeTimeFormat | Intl.NumberFormat>(key: string, create: () => T): T {
+  if (!formatters.has(key)) formatters.set(key, create());
+  return formatters.get(key) as T;
+}
 
 function toNum(date: TimerelAnyDate): number {
   if (typeof date === "number") return date;
@@ -55,20 +68,46 @@ function toNum(date: TimerelAnyDate): number {
   return Date.parse(date);
 }
 
+function formatIntl(num: number, index: number, future: boolean, opts: IntlOpts): string {
+  const {times, locale, noAffix, aliases, style} = opts;
+  if (last?.times !== times || last.locale !== locale || last.noAffix !== noAffix || last.aliases !== aliases || last.style !== style) {
+    if (!resultsByTimes.has(times)) resultsByTimes.set(times, new Map());
+    const resultsByOpts = resultsByTimes.get(times)!;
+    const optsKey = `${String(locale)}|${noAffix}|${aliases}|${style}`;
+    if (!resultsByOpts.has(optsKey)) resultsByOpts.set(optsKey, new Map());
+    last = {...opts, results: resultsByOpts.get(optsKey)!};
+  }
+
+  const key = index < 0 ? NaN : (num * times.length + index) * 2 + Number(future);
+  let result = last.results.get(key);
+  if (result === undefined) {
+    const numeric = index < 0 || aliases ? "auto" : "always";
+    const unit = index < 0 ? "second" : (times[index][4] || times[index][2]) as Intl.RelativeTimeFormatUnit;
+    result = noAffix && index >= 0 ?
+      getFormatter(`${String(locale)}|${style}|${unit}`, () => new Intl.NumberFormat(locale, {style: "unit", unit, unitDisplay: style})).format(num) :
+      getFormatter(`${String(locale)}|${style}|${numeric}`, () => new Intl.RelativeTimeFormat(locale, {style, numeric})).format(future ? num : -num, unit);
+    if (last.results.size >= 1000) last.results.clear(); // bounds custom tables with unbounded counts
+    last.results.set(key, result);
+  }
+  return result;
+}
+
 /** Format a date to a relative time format */
-export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString, aliases = false, aliasesMap = defaultAliasesMap, longUnits = false, shortUnits = false}: TimerelOpts = {}): string {
+export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString, unknownString, aliases = false, aliasesMap = defaultAliasesMap, longUnits = false, shortUnits = false, locale = "en"}: TimerelOpts = {}): string {
   let diff = (now === undefined ? Date.now() : toNum(now)) - toNum(date);
   if (Number.isNaN(diff)) return unknownString || String(date);
 
   const future = diff < 0;
   if (future) diff = -diff;
-  if (diff < nowThreshold) return nowString;
+  const intlOpts: IntlOpts | undefined = locale === "en" ? undefined : {times, locale, noAffix, aliases, style: shortUnits ? "narrow" : longUnits ? "long" : "short"};
+  if (diff < nowThreshold) return nowString ?? (intlOpts ? formatIntl(0, -1, future, intlOpts) : "now");
 
   let base = "";
   for (let index = 0, len = times.length; index < len; index++) {
     const time = times[index];
     if (diff >= time[1]) continue;
     const num = Math.trunc(diff / time[0]);
+    if (intlOpts) return formatIntl(num, index, future, intlOpts);
     base = shortUnits ? `${num}${time[3] || time[2]}` : `${num} ${longUnits && time[4] || time[2]}${num === 1 ? "" : "s"}`;
     break;
   }
