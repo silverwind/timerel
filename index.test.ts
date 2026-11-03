@@ -49,6 +49,8 @@ test("exact outputs", () => {
     [-864e5, {now: 0, locale: "de", aliases: true}, "gestern"],
     [-2 * 864e5, {now: 0, locale: "de", times}, "vor 48 Std."],
     [-3e5, {now: 0, locale: ["de-AT", "en"]}, "vor 5 Min."],
+    [-18e6, {now: 0, format: (num, unit) => `${-num} ${unit === "hour" ? "hrs" : unit} ago`}, "5 hrs ago"],
+    [3e5, {now: 0, locale: "de", format: (num, unit) => `${num} ${unit}`}, "5 minute"],
     ["foo", {locale: "de"}, "foo"],
     ["foo", undefined, "foo"],
     ["foo", {unknownString: "unknown"}, "unknown"],

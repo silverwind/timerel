@@ -61,6 +61,8 @@ export type TimerelOpts = {
   shortUnits?: boolean,
   /** Locale, formatted via `Intl` unless `"en"`. Default: `"en"`. */
   locale?: Intl.LocalesArgument,
+  /** Custom formatter receiving the count, negative for past dates, and the unit. Overrides all other formatting options except `nowString` and `unknownString`. */
+  format?: (num: number, unit: TimeUnit) => string,
 };
 
 type IntlOpts = Required<Pick<TimerelOpts, "locale" | "noAffix" | "aliases">> & {style: Intl.RelativeTimeFormatStyle};
@@ -102,7 +104,7 @@ function formatIntl(num: number, unit: TimeUnit | undefined, future: boolean, op
 }
 
 /** Format a date to a relative time format */
-export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString, unknownString, aliases = false, aliasesMap = defaultAliasesMap, longUnits = false, shortUnits = false, locale = "en"}: TimerelOpts = {}): string {
+export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString, unknownString, aliases = false, aliasesMap = defaultAliasesMap, longUnits = false, shortUnits = false, locale = "en", format}: TimerelOpts = {}): string {
   let diff = (now === undefined ? Date.now() : toNum(now)) - toNum(date);
   if (Number.isNaN(diff)) return unknownString || String(date);
 
@@ -117,6 +119,7 @@ export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = def
     const unit = times[index][1];
     const [ms, label, shortLabel, longLabel] = units[unit];
     const num = Math.trunc(diff / ms);
+    if (format) return format(future ? num : -num, unit);
     if (intlOpts) return formatIntl(num, unit, future, intlOpts);
     base = shortUnits ? `${num}${shortLabel}` : `${num} ${longUnits ? longLabel : label}${num === 1 ? "" : "s"}`;
     break;

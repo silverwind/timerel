@@ -43,5 +43,6 @@ for (const date of dates) {
 - `longUnits` *Boolean*: Use minutes/seconds instead of mins/secs. Default: `false`.
 - `shortUnits` *Boolean*: Use short units like `1d ago`, overriding `longUnits`. Built-in aliases do not match. Default: `false`.
 - `locale` *String, Array or Intl.Locale*: Locale like `"de"`, formatted via `Intl` unless `"en"`. Default: `"en"`.
+- `format` *Function*: Custom formatter `(num, unit) => string` receiving the count, negative for past dates, and the unit. Overrides all other formatting options except `nowString` and `unknownString`.
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence
