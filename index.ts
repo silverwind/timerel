@@ -1,14 +1,26 @@
 export type TimerelAnyDate = string | number | Date;
-export type TimesArray = Array<[number, number, string, string?, string?]>;
+export type TimeUnit = Intl.RelativeTimeFormatUnitSingular;
+export type TimesArray = Array<[maxMs: number, unit: TimeUnit]>;
+
+const units: Record<TimeUnit, [ms: number, label: string, shortLabel: string, longLabel: string, id: number]> = {
+  second: [1e3, "sec", "s", "second", 0],
+  minute: [6e4, "min", "m", "minute", 1],
+  hour: [36e5, "hour", "h", "hour", 2],
+  day: [864e5, "day", "d", "day", 3],
+  week: [6048e5, "week", "w", "week", 4],
+  month: [2628e6, "month", "mo", "month", 5],
+  quarter: [7884e6, "quarter", "q", "quarter", 6],
+  year: [31536e6, "year", "y", "year", 7],
+};
 
 const defaultTimes: TimesArray = [
-  [1e3, 6e4, "sec", "s", "second"],
-  [6e4, 36e5, "min", "m", "minute"],
-  [36e5, 864e5, "hour", "h"],
-  [864e5, 6048e5, "day", "d"],
-  [6048e5, 2628e6, "week", "w"],
-  [2628e6, 31536e6, "month", "mo"],
-  [31536e6, Infinity, "year", "y"],
+  [6e4, "second"],
+  [36e5, "minute"],
+  [864e5, "hour"],
+  [6048e5, "day"],
+  [2628e6, "week"],
+  [31536e6, "month"],
+  [Infinity, "year"],
 ];
 
 export type AliasesMap = Record<string, string>;
@@ -31,7 +43,7 @@ export type TimerelOpts = {
   now?: TimerelAnyDate,
   /** Whether to omit `ago` and `in` affixes. Default: `false`. */
   noAffix?: boolean,
-  /** A custom time table of `[msPerUnit, maxMs, unit, shortUnit?, longUnit?]` entries. */
+  /** A custom time table of `[maxMs, unit]` entries, ascending by `maxMs`. */
   times?: TimesArray,
   /** Number of milliseconds below which to output `"now"`. Default: 2000. */
   nowThreshold?: number,
@@ -47,7 +59,22 @@ export type TimerelOpts = {
   longUnits?: boolean,
   /** Use short units like `1d`, overriding `longUnits`. Default: `false`. */
   shortUnits?: boolean,
+  /** Locale, formatted via `Intl` unless `"en"`. Default: `"en"`. */
+  locale?: Intl.LocalesArgument,
+  /** Custom formatter receiving the count, negative for past dates, and the unit. Overrides all other formatting options except `nowString` and `unknownString`. */
+  format?: (num: number, unit: TimeUnit) => string,
 };
+
+type IntlOpts = Required<Pick<TimerelOpts, "locale" | "noAffix" | "aliases">> & {style: Intl.RelativeTimeFormatStyle};
+
+const formatters = new Map<string, Intl.RelativeTimeFormat | Intl.NumberFormat>();
+const resultsByOpts = new Map<string, Map<number, string>>();
+let last: IntlOpts & {results: Map<number, string>} | undefined; // skips the keyed lookup when options repeat
+
+function getFormatter<T extends Intl.RelativeTimeFormat | Intl.NumberFormat>(key: string, create: () => T): T {
+  if (!formatters.has(key)) formatters.set(key, create());
+  return formatters.get(key) as T;
+}
 
 function toNum(date: TimerelAnyDate): number {
   if (typeof date === "number") return date;
@@ -55,21 +82,46 @@ function toNum(date: TimerelAnyDate): number {
   return Date.parse(date);
 }
 
+function formatIntl(num: number, unit: TimeUnit | undefined, future: boolean, opts: IntlOpts): string {
+  const {locale, noAffix, aliases, style} = opts;
+  if (last?.locale !== locale || last.noAffix !== noAffix || last.aliases !== aliases || last.style !== style) {
+    const optsKey = `${String(locale)}|${noAffix}|${aliases}|${style}`;
+    if (!resultsByOpts.has(optsKey)) resultsByOpts.set(optsKey, new Map());
+    last = {...opts, results: resultsByOpts.get(optsKey)!};
+  }
+
+  const key = unit ? (num * 8 + units[unit][4]) * 2 + Number(future) : NaN;
+  let result = last.results.get(key);
+  if (result === undefined) {
+    const numeric = !unit || aliases ? "auto" : "always";
+    result = noAffix && unit ?
+      getFormatter(`${String(locale)}|${style}|${unit}`, () => new Intl.NumberFormat(locale, {style: "unit", unit, unitDisplay: style})).format(num) :
+      getFormatter(`${String(locale)}|${style}|${numeric}`, () => new Intl.RelativeTimeFormat(locale, {style, numeric})).format(future ? num : -num, unit ?? "second");
+    if (last.results.size >= 1000) last.results.clear(); // bounds custom tables with unbounded counts
+    last.results.set(key, result);
+  }
+  return result;
+}
+
 /** Format a date to a relative time format */
-export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString = "now", unknownString, aliases = false, aliasesMap = defaultAliasesMap, longUnits = false, shortUnits = false}: TimerelOpts = {}): string {
+export function timerel(date: TimerelAnyDate, {now, noAffix = false, times = defaultTimes, nowThreshold = 2000, nowString, unknownString, aliases = false, aliasesMap = defaultAliasesMap, longUnits = false, shortUnits = false, locale = "en", format}: TimerelOpts = {}): string {
   let diff = (now === undefined ? Date.now() : toNum(now)) - toNum(date);
   if (Number.isNaN(diff)) return unknownString || String(date);
 
   const future = diff < 0;
   if (future) diff = -diff;
-  if (diff < nowThreshold) return nowString;
+  const intlOpts: IntlOpts | undefined = locale === "en" ? undefined : {locale, noAffix, aliases, style: shortUnits ? "narrow" : longUnits ? "long" : "short"};
+  if (diff < nowThreshold) return nowString ?? (intlOpts ? formatIntl(0, undefined, future, intlOpts) : "now");
 
   let base = "";
   for (let index = 0, len = times.length; index < len; index++) {
-    const time = times[index];
-    if (diff >= time[1]) continue;
-    const num = Math.trunc(diff / time[0]);
-    base = shortUnits ? `${num}${time[3] || time[2]}` : `${num} ${longUnits && time[4] || time[2]}${num === 1 ? "" : "s"}`;
+    if (diff >= times[index][0]) continue;
+    const unit = times[index][1];
+    const [ms, label, shortLabel, longLabel] = units[unit];
+    const num = Math.trunc(diff / ms);
+    if (format) return format(future ? num : -num, unit);
+    if (intlOpts) return formatIntl(num, unit, future, intlOpts);
+    base = shortUnits ? `${num}${shortLabel}` : `${num} ${longUnits ? longLabel : label}${num === 1 ? "" : "s"}`;
     break;
   }
 
